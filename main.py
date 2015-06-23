@@ -23,13 +23,11 @@ def webhook():
                 'channel': request.form.get('channel_id')
             }
             try:
-                print params
-                response = requests.get(SLACK_CHANNEL_HISTORY_URL, data=json.dumps(params))
+                response = requests.get(SLACK_CHANNEL_HISTORY_URL, params=params)
                 data = json.loads(response.content)
-                print data
                 for message in data['messages']:
                     if message['type'] == 'message' and ('@everyone' in message['text'] or '@channel' in message['text']):
-                        response = requests.get(SLACK_USER_INFO_URL, data=json.dumps({'token': SLACK_HISTORY_TOKEN, 'user': message['user']}))
+                        response = requests.get(SLACK_USER_INFO_URL, params={'token': SLACK_HISTORY_TOKEN, 'user': message['user']})
                         data = json.loads(response.content)
                         if 'ok' in data and data['ok'] == True:
                             shamee = '@%s' % data['user']['name']
