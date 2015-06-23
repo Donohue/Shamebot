@@ -25,15 +25,19 @@ def webhook():
             try:
                 response = requests.get(SLACK_CHANNEL_HISTORY_URL, params=params)
                 data = json.loads(response.content)
+                print data
                 for message in data['messages']:
                     if message['type'] == 'message' and ('@everyone' in message['text'] or '@channel' in message['text']):
                         response = requests.get(SLACK_USER_INFO_URL, params={'token': SLACK_HISTORY_TOKEN, 'user': message['user']})
                         data = json.loads(response.content)
+                        print data
                         if 'ok' in data and data['ok'] == True:
                             shamee = '@%s' % data['user']['name']
                             break
             except Exception, e:
                 return 'Oops! There was a problem finding last @channel or @everyone mention: %s' % str(e)
+        elif SLACK_HISTORY_TOKEN:
+            return 'Could not find last @everyone or @channel mention :\'('
 
         if not shamee.startswith('@'):
             return 'Please enter a valid username to shame'
