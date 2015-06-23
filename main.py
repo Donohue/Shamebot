@@ -22,7 +22,7 @@ def webhook():
         params = {
                 'username': 'shamebot',
                 'icon_emoji': ':bell:',
-                'text': '@%s shamed %s' % (shamer, shamee),
+                'text': text,
                 'channel': '#%s' % request.form.get('channel_name')
         }
 
