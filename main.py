@@ -25,9 +25,8 @@ def webhook():
             try:
                 response = requests.get(SLACK_CHANNEL_HISTORY_URL, params=params)
                 data = json.loads(response.content)
-                print data
                 for message in data['messages']:
-                    if message['type'] == 'message' and ('@everyone' in message['text'] or '@channel' in message['text']):
+                    if message['type'] == 'message' and ('<!everyone>' in message['text'] or '<!channel>' in message['text']):
                         response = requests.get(SLACK_USER_INFO_URL, params={'token': SLACK_HISTORY_TOKEN, 'user': message['user']})
                         data = json.loads(response.content)
                         print data
