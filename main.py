@@ -8,6 +8,7 @@ app.config['DEBUG'] = True
 
 SLACK_HISTORY_TOKEN = os.environ.get('SLACK_HISTORY_TOKEN', None)
 SLACK_CHANNEL_HISTORY_URL = 'https://slack.com/api/channels.history'
+SLACK_USER_INFO_URL = ' https://slack.com/api/users.info'
 SLACK_OUTGOING_WEBHOOK_TOKEN = os.environ.get('SLACK_OUTGOING_WEBHOOK_TOKEN', None)
 SLACK_INCOMING_WEBHOOK_URL = os.environ['SLACK_INCOMING_WEBHOOK_URL']
 
