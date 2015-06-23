@@ -30,7 +30,6 @@ def webhook():
                     if message['type'] == 'message' and ('<!everyone>' in message['text'] or '<!channel>' in message['text']):
                         response = requests.get(SLACK_USER_INFO_URL, params={'token': SLACK_HISTORY_TOKEN, 'user': message['user']})
                         data = json.loads(response.content)
-                        print data
                         if 'ok' in data and data['ok'] == True:
                             shamee = '@%s' % data['user']['name']
                             break
