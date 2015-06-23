@@ -13,17 +13,19 @@ SLACK_INCOMING_WEBHOOK_URL = os.environ['SLACK_INCOMING_WEBHOOK_URL']
 def webhook():
     token = request.form.get('token')
     if not SLACK_OUTGOING_WEBHOOK_TOKEN or token == SLACK_OUTGOING_WEBHOOK_TOKEN:
-        shamer = request.form.get('user_name')
+        shamer = '@%s' % request.form.get('user_name')
         shamee = request.form.get('text')
         if not shamee.startswith('@'):
             return 'Please enter a valid username to shame'
 
+        text = '%s shamed %s' if shamer != shamee else '%s shamed themself'
         params = {
                 'username': 'shamebot',
                 'icon_emoji': ':bell:',
                 'text': '@%s shamed %s' % (shamer, shamee),
                 'channel': '#%s' % request.form.get('channel_name')
         }
+
         try:
             requests.post(SLACK_INCOMING_WEBHOOK_URL, data=json.dumps(params))
             params['channel'] = shamee
