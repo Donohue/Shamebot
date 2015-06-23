@@ -18,7 +18,7 @@ def webhook():
         if not shamee.startswith('@'):
             return 'Please enter a valid username to shame'
 
-        text = '%s shamed %s' if shamer != shamee else '%s shamed themself'
+        text = '%s shamed %s' % (shamer, shamee) if shamer != shamee else '%s shamed themself' % shamer
         params = {
                 'username': 'shamebot',
                 'icon_emoji': ':bell:',
