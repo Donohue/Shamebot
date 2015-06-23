@@ -18,7 +18,6 @@ def webhook():
     if not SLACK_OUTGOING_WEBHOOK_TOKEN or token == SLACK_OUTGOING_WEBHOOK_TOKEN:
         shamer = '@%s' % request.form.get('user_name')
         shamee = request.form.get('text')
-        print 'Shamee: %s' % shamee
         if not shamee and SLACK_HISTORY_TOKEN:
             params = {
                 'token': SLACK_HISTORY_TOKEN,
@@ -36,7 +35,7 @@ def webhook():
                             break
             except Exception, e:
                 return 'Oops! There was a problem finding last @channel or @everyone mention: %s' % str(e)
-        elif SLACK_HISTORY_TOKEN:
+        elif not shamee:
             return 'Could not find last @everyone or @channel mention :\'('
 
         if not shamee.startswith('@'):
