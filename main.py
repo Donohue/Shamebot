@@ -23,6 +23,7 @@ def webhook():
                 'channel': request.form.get('channel_id')
             }
             try:
+                print params
                 response = requests.get(SLACK_CHANNEL_HISTORY_URL, data=json.dumps(params))
                 data = json.loads(response.content)
                 print data
