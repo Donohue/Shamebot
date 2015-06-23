@@ -6,6 +6,8 @@ from flask import Flask, request
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
+SLACK_HISTORY_TOKEN = os.environ.get('SLACK_HISTORY_TOKEN', None)
+SLACK_CHANNEL_HISTORY_URL = 'https://slack.com/api/channels.history'
 SLACK_OUTGOING_WEBHOOK_TOKEN = os.environ.get('SLACK_OUTGOING_WEBHOOK_TOKEN', None)
 SLACK_INCOMING_WEBHOOK_URL = os.environ['SLACK_INCOMING_WEBHOOK_URL']
 
@@ -15,6 +17,24 @@ def webhook():
     if not SLACK_OUTGOING_WEBHOOK_TOKEN or token == SLACK_OUTGOING_WEBHOOK_TOKEN:
         shamer = '@%s' % request.form.get('user_name')
         shamee = request.form.get('text')
+        if not shamee and SLACK_HISTORY_TOKEN:
+            params = {
+                'token': SLACK_HISTORY_TOKEN,
+                'channel': request.form.get('channel_id')
+            }
+            try:
+                response = requests.get(SLACK_CHANNEL_HISTORY_URL, data=json.dumps(params))
+                data = json.loads(response.content)
+                for message in data['messages']:
+                    if message['type'] == 'message' and ('@everyone' in message['text'] or '@channel' in message['text']):
+                        response = requests.get(SLACK_USER_INFO_URL, data=json.dumps({'token': SLACK_HISTORY_TOKEN, 'user': message['user']}))
+                        data = json.loads(response.content)
+                        if 'ok' in data and data['ok'] == True:
+                            shamee = '@%s' % data['user']['name']
+                            break
+            except Exception, e:
+                return 'Oops! There was a problem finding last @channel or @everyone mention: %s' % str(e)
+
         if not shamee.startswith('@'):
             return 'Please enter a valid username to shame'
 
