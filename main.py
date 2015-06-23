@@ -18,6 +18,7 @@ def webhook():
     if not SLACK_OUTGOING_WEBHOOK_TOKEN or token == SLACK_OUTGOING_WEBHOOK_TOKEN:
         shamer = '@%s' % request.form.get('user_name')
         shamee = request.form.get('text')
+        print 'Shamee: %s' % shamee
         if not shamee and SLACK_HISTORY_TOKEN:
             params = {
                 'token': SLACK_HISTORY_TOKEN,
