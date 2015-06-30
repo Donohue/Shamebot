@@ -1,5 +1,9 @@
 # shamebot
 
+![shamebot screenshot](/shamebot.png "shamebot in action")
+
+![shamebot dm screenshot](/shamebot_dms.png "shamebot DMs")
+
 shamebot is a Slack [slash command](https://api.slack.com/slash-commands) and [incoming webhook](https://api.slack.com/incoming-webhooks) for distributing shame.
 
 ## Setup
